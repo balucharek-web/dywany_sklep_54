@@ -6,7 +6,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig(() => {
   const isGitHubPages = process.env.GITHUB_PAGES === 'true';
-  const base = isGitHubPages ? '/Dywany/' : '/';
+  const base = isGitHubPages ? '/dywany_sklep_54/' : '/';
 
   return {
     base,
@@ -17,10 +17,10 @@ export default defineConfig(() => {
         registerType: 'autoUpdate',
         includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'icon.svg'],
         manifest: {
-          id: `${base}?app=lmdywany_v3`,
-          name: 'LM Dywany',
-          short_name: 'LM Dywany',
-          description: 'System ekspozycji dywanów dla Leroy Merlin Sklep 038 Mikołów',
+          id: `${base}?app=lmdywany_sklep54`,
+          name: 'LM Dywany 54',
+          short_name: 'LM Dywany 54',
+          description: 'System ekspozycji dywanów dla Leroy Merlin Sklep 54 Bełchatów',
           theme_color: '#22c55e',
           background_color: '#22c55e',
           display: 'standalone',
