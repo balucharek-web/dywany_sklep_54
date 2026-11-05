@@ -1,6 +1,5 @@
 import { X, HelpCircle, Smartphone, Search, Database, ShieldCheck, Printer, RefreshCw, Download, Mail, LifeBuoy } from 'lucide-react';
 import { STORE_NUMBER, STORE_CITY } from '../types';
-import { downloadCbaPackage } from '../utils/downloadCbaPackage';
 
 interface HelpModalProps {
   isOpen: boolean;
@@ -93,24 +92,7 @@ export function HelpModal({ isOpen, onClose, superAdminEmail }: HelpModalProps) 
             </div>
           </div>
 
-          <div className="flex items-start gap-3 bg-slate-50 p-3 rounded-xl border border-slate-200">
-            <Download className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-            <div className="flex-1">
-              <span className="font-bold text-gray-900 block">Paczka aktualizacji serwera CBA.pl &rarr; Wersja 2.0</span>
-              <p className="text-gray-600 mb-2">
-                Pobierz gotową paczkę plików ZIP do wgrania na serwer CBA.pl (zawiera skrypt przekierowujący, czyszczenie starego cache PWA oraz nowe ikony 2.0).
-              </p>
-              <button
-                onClick={async () => {
-                  await downloadCbaPackage();
-                }}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-lg transition-colors cursor-pointer shadow-xs active:scale-95"
-              >
-                <Download className="w-3.5 h-3.5" />
-                Pobierz paczka_cba_aktualizacja.zip
-              </button>
-            </div>
-          </div>
+
 
           {/* Pomoc techniczna i kontakt */}
           <div className="flex items-start gap-3 bg-linear-to-r from-blue-50 to-indigo-50 p-3.5 rounded-xl border border-blue-200">

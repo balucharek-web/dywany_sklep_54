@@ -36,7 +36,6 @@ import { AdminManagementModal } from './components/AdminManagementModal';
 import { HelpModal } from './components/HelpModal';
 import { ActivityLogModal } from './components/ActivityLogModal';
 import { OfflineIndicator } from './components/OfflineIndicator';
-import { CBAInstallTransitionModal } from './components/CBAInstallTransitionModal';
 import { MoveCarpetModal } from './components/MoveCarpetModal';
 import { ShieldAlert, LogOut, CheckCircle2 } from 'lucide-react';
 
@@ -1125,7 +1124,6 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#f3f4f6] text-gray-900 flex flex-col font-sans notranslate" translate="no">
       {/* CBA PWA Migration & Automatic Transition Assistant */}
-      <CBAInstallTransitionModal />
 
       {/* Top Header */}
       <Header

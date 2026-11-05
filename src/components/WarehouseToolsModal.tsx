@@ -15,7 +15,6 @@ import {
   ArrowLeftRight
 } from 'lucide-react';
 import { STORE_NUMBER } from '../types';
-import { downloadCbaPackage } from '../utils/downloadCbaPackage';
 
 interface WarehouseToolsModalProps {
   isOpen: boolean;
@@ -148,21 +147,8 @@ export function WarehouseToolsModal({
             </div>
           </div>
 
-          {/* Kopia zapasowa i aktualizacja CBA */}
+          {/* Kopia zapasowa bazy */}
           <div className="pt-1 flex flex-col gap-2">
-            <button
-              onClick={async () => {
-                await downloadCbaPackage();
-              }}
-              className="w-full flex items-center justify-between p-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100/90 text-emerald-950 font-bold border border-emerald-300 transition-colors text-xs cursor-pointer"
-            >
-              <div className="flex items-center gap-2">
-                <Download className="w-4 h-4 text-emerald-700" />
-                <span>Pobierz paczkę aktualizacyjną CBA.pl (ZIP)</span>
-              </div>
-              <span className="text-[10px] text-emerald-700 font-mono">paczka_cba.zip</span>
-            </button>
-
             <button
               onClick={() => {
                 onClose();
