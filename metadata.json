@@ -1,0 +1,6 @@
+{
+  "name": "LM Dywany 54 - System Ekspozycji Sklep Bełchatów",
+  "description": "System ekspozycji dywanów dla Leroy Merlin Sklep 54 Bełchatów. Wyszukiwanie, lokalizacje regałów, generowanie fiszek i zarządzanie magazynem z synchronizacją w czasie rzeczywistym.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
