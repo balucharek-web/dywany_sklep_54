@@ -448,6 +448,32 @@ export function WarehousePanel({
         totalCarpets={carpets.length}
       />
 
+      {/* Empty Database Banner with Import Action */}
+      {carpets.length === 0 && (
+        <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-sm">
+              <Upload className="w-5 h-5" />
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-gray-900">
+                Baza dywanów Sklepu {STORE_NUMBER} jest pusta
+              </h4>
+              <p className="text-xs text-gray-600 mt-0.5">
+                Możesz zaimportować gotową bazę z pliku Excel (.xlsx, .xls, .csv), albo dodawać pozycje skanerem kodów i ręcznie.
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={onOpenImport}
+            className="w-full sm:w-auto px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2 shadow-sm transition-all active:scale-98 shrink-0 cursor-pointer"
+          >
+            <Upload className="w-4 h-4" />
+            Zaimportuj plik (Excel / CSV)
+          </button>
+        </div>
+      )}
+      
       {/* Racks / Bays listing: 1 column on mobile, 2 columns on desktop PC */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-5 mt-2">
         {baysList.map((bayNum) => {
