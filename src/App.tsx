@@ -1230,11 +1230,13 @@ export default function App() {
         onLogout={handleLogout}
       />
 
-      <BarcodeScannerModal
-        isOpen={isScannerModalOpen}
-        onClose={() => setIsScannerModalOpen(false)}
-        onScanSuccess={handleScanSuccess}
-      />
+      {isScannerModalOpen && (
+        <BarcodeScannerModal
+          isOpen={isScannerModalOpen}
+          onClose={() => setIsScannerModalOpen(false)}
+          onScanSuccess={handleScanSuccess}
+        />
+      )}
 
       <FiszkiBatchModal
         isOpen={isFiszkiBatchModalOpen}
