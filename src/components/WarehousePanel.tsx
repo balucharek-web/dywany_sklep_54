@@ -21,7 +21,8 @@ import {
   Clock,
   SlidersHorizontal,
   ArrowLeftRight,
-  ExternalLink
+  ExternalLink,
+  BarChart3
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import { formatDateTime, formatRelativeTime, getLeroyMerlinSearchUrl } from '../utils/formatters';
@@ -144,6 +145,8 @@ interface WarehousePanelProps {
   onDeleteWarehouse: (bayNumber: number, deleteCarpets: boolean) => Promise<void>;
   onAddWarehouses: (numbers: number[]) => Promise<void>;
   onMoveProduct?: (carpet: Carpet) => void;
+  onOpenPowerBiAudit?: () => void;
+  pbiCount?: number;
 }
 
 export function WarehousePanel({
@@ -162,7 +165,9 @@ export function WarehousePanel({
   onOpenSuperAdminModal,
   onDeleteWarehouse,
   onAddWarehouses,
-  onMoveProduct
+  onMoveProduct,
+  onOpenPowerBiAudit,
+  pbiCount
 }: WarehousePanelProps) {
   const [filterQuery, setFilterQuery] = useState('');
   const [onlyEmpty, setOnlyEmpty] = useState(false);
@@ -189,7 +194,7 @@ export function WarehousePanel({
     const downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute('href', dataStr);
     const dateStr = new Date().toISOString().split('T')[0];
-    downloadAnchor.setAttribute('download', `baza_dywany_sklep54_${dateStr}.json`);
+    downloadAnchor.setAttribute('download', `baza_dywany_sklep038_${dateStr}.json`);
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
@@ -217,14 +222,14 @@ export function WarehousePanel({
 
     const worksheet = XLSX.utils.json_to_sheet(rows);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Dywany Sklep 54');
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Dywany Sklep 038');
 
     // Auto column widths
     const maxCols = [15, 18, 12, 40, 15, 18, 15];
     worksheet['!cols'] = maxCols.map((w) => ({ wch: w }));
 
     const dateStr = new Date().toISOString().split('T')[0];
-    XLSX.writeFile(workbook, `dywany_sklep54_${dateStr}.xlsx`);
+    XLSX.writeFile(workbook, `dywany_sklep038_${dateStr}.xlsx`);
   };
 
   // Determine all bay numbers to show based on activeBays
@@ -346,6 +351,24 @@ export function WarehousePanel({
               <span className="hidden sm:inline">Stock expo</span>
             </button>
 
+            {/* Quick action: Audyt Power BI */}
+            {onOpenPowerBiAudit && (
+              <button
+                onClick={onOpenPowerBiAudit}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 text-amber-950 border border-amber-300 text-xs font-bold transition-all shadow-2xs active:scale-95 cursor-pointer"
+                title="Porównaj ekspozycję sklepu z oficjalnym raportem Stock Expo w Power BI"
+              >
+                <BarChart3 className="w-3.5 h-3.5 text-amber-700" />
+                <span className="hidden sm:inline">Audyt Power BI</span>
+                <span className="sm:hidden">PBI</span>
+                {typeof pbiCount === 'number' && pbiCount > 0 && (
+                  <span className="px-1.5 py-0.2 rounded-full text-[9px] bg-amber-200 text-amber-900 font-mono font-bold">
+                    {pbiCount}
+                  </span>
+                )}
+              </button>
+            )}
+
             {/* Quick action: Historia zmian (audyt) */}
             <button
               onClick={onOpenActivityLogs}
@@ -436,6 +459,8 @@ export function WarehousePanel({
         onClose={() => setIsToolsOpen(false)}
         onOpenImport={onOpenImport}
         onOpenStockExpo={onOpenStockExpo}
+        onOpenPowerBiAudit={onOpenPowerBiAudit || (() => {})}
+        pbiCount={pbiCount}
         onExportJSON={handleExportJSON}
         onExportXLSX={handleExportXLSX}
         onOpenActivityLogs={onOpenActivityLogs}
@@ -448,32 +473,6 @@ export function WarehousePanel({
         totalCarpets={carpets.length}
       />
 
-      {/* Empty Database Banner with Import Action */}
-      {carpets.length === 0 && (
-        <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-sm">
-              <Upload className="w-5 h-5" />
-            </div>
-            <div>
-              <h4 className="text-sm font-bold text-gray-900">
-                Baza dywanów Sklepu {STORE_NUMBER} jest pusta
-              </h4>
-              <p className="text-xs text-gray-600 mt-0.5">
-                Możesz zaimportować gotową bazę z pliku Excel (.xlsx, .xls, .csv), albo dodawać pozycje skanerem kodów i ręcznie.
-              </p>
-            </div>
-          </div>
-          <button
-            onClick={onOpenImport}
-            className="w-full sm:w-auto px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2 shadow-sm transition-all active:scale-98 shrink-0 cursor-pointer"
-          >
-            <Upload className="w-4 h-4" />
-            Zaimportuj plik (Excel / CSV)
-          </button>
-        </div>
-      )}
-      
       {/* Racks / Bays listing: 1 column on mobile, 2 columns on desktop PC */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-5 mt-2">
         {baysList.map((bayNum) => {

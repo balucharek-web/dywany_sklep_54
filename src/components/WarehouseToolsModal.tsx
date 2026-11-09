@@ -12,15 +12,20 @@ import {
   Users,
   ShieldCheck,
   Package,
-  ArrowLeftRight
+  ArrowLeftRight,
+  RefreshCw,
+  BarChart3
 } from 'lucide-react';
 import { STORE_NUMBER } from '../types';
+import { downloadCbaPackage } from '../utils/downloadCbaPackage';
 
 interface WarehouseToolsModalProps {
   isOpen: boolean;
   onClose: () => void;
   onOpenImport: () => void;
   onOpenStockExpo: () => void;
+  onOpenPowerBiAudit: () => void;
+  pbiCount?: number;
   onExportJSON: () => void;
   onExportXLSX: () => void;
   onOpenActivityLogs: () => void;
@@ -38,6 +43,8 @@ export function WarehouseToolsModal({
   onClose,
   onOpenImport,
   onOpenStockExpo,
+  onOpenPowerBiAudit,
+  pbiCount,
   onExportJSON,
   onExportXLSX,
   onOpenActivityLogs,
@@ -100,6 +107,29 @@ export function WarehouseToolsModal({
               <button
                 onClick={() => {
                   onClose();
+                  onOpenPowerBiAudit();
+                }}
+                className="flex items-center gap-3 p-3 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-950 font-bold border border-amber-300 transition-all text-left cursor-pointer active:scale-98"
+              >
+                <div className="w-8 h-8 rounded-lg bg-amber-500 text-gray-950 flex items-center justify-center shrink-0 font-black shadow-2xs">
+                  <BarChart3 className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="text-xs sm:text-sm font-bold flex items-center gap-1.5">
+                    <span>Audyt Power BI</span>
+                    {typeof pbiCount === 'number' && pbiCount > 0 && (
+                      <span className="px-1.5 py-0.2 rounded-full text-[9px] bg-amber-200 text-amber-900 font-mono font-bold">
+                        {pbiCount}
+                      </span>
+                    )}
+                  </div>
+                  <div className="text-[10px] text-amber-800 font-normal">Porównaj ze Stock Expo</div>
+                </div>
+              </button>
+
+              <button
+                onClick={() => {
+                  onClose();
                   onOpenActivityLogs();
                 }}
                 className="flex items-center gap-3 p-3 rounded-xl bg-purple-50 hover:bg-purple-100/80 text-purple-950 font-bold border border-purple-200/70 transition-all text-left cursor-pointer active:scale-98"
@@ -147,8 +177,21 @@ export function WarehouseToolsModal({
             </div>
           </div>
 
-          {/* Kopia zapasowa bazy */}
+          {/* Kopia zapasowa i aktualizacja CBA */}
           <div className="pt-1 flex flex-col gap-2">
+            <button
+              onClick={async () => {
+                await downloadCbaPackage();
+              }}
+              className="w-full flex items-center justify-between p-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100/90 text-emerald-950 font-bold border border-emerald-300 transition-colors text-xs cursor-pointer"
+            >
+              <div className="flex items-center gap-2">
+                <Download className="w-4 h-4 text-emerald-700" />
+                <span>Pobierz paczkę aktualizacyjną CBA.pl (ZIP)</span>
+              </div>
+              <span className="text-[10px] text-emerald-700 font-mono">paczka_cba.zip</span>
+            </button>
+
             <button
               onClick={() => {
                 onClose();
@@ -161,6 +204,37 @@ export function WarehouseToolsModal({
                 <span>Pobierz pełną kopię zapasową bazy (JSON)</span>
               </div>
               <span className="text-[10px] text-gray-400 font-mono">backup.json</span>
+            </button>
+
+            <button
+              onClick={async () => {
+                if (typeof window !== 'undefined') {
+                  if ('serviceWorker' in navigator) {
+                    try {
+                      const registrations = await navigator.serviceWorker.getRegistrations();
+                      for (const reg of registrations) {
+                        await reg.unregister();
+                      }
+                    } catch (_) {}
+                  }
+                  if ('caches' in window) {
+                    try {
+                      const keys = await caches.keys();
+                      for (const k of keys) {
+                        await caches.delete(k);
+                      }
+                    } catch (_) {}
+                  }
+                  window.location.reload();
+                }
+              }}
+              className="w-full flex items-center justify-between p-2.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-900 font-bold border border-blue-200 transition-colors text-xs cursor-pointer"
+            >
+              <div className="flex items-center gap-2">
+                <RefreshCw className="w-4 h-4 text-blue-600" />
+                <span>Zaktualizuj aplikację (wyczyść pamięć podręczną)</span>
+              </div>
+              <span className="text-[10px] text-blue-600 font-semibold">Odśwież PWA</span>
             </button>
           </div>
 
