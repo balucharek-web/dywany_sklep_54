@@ -6,7 +6,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig(() => {
   const isGitHubPages = process.env.GITHUB_PAGES === 'true';
-  const base = isGitHubPages ? '/dywany_sklep_54/' : '/';
+  const base = isGitHubPages ? '/Dywany/' : '/';
 
   return {
     base,
@@ -17,10 +17,10 @@ export default defineConfig(() => {
         registerType: 'autoUpdate',
         includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'icon.svg'],
         manifest: {
-          id: `${base}?app=lmdywany_sklep54`,
-          name: 'LM Dywany 54',
-          short_name: 'LM Dywany 54',
-          description: 'System ekspozycji dywanów dla Leroy Merlin Sklep 54 Bełchatów',
+          id: `${base}?app=lmdywany_v3`,
+          name: 'LM Dywany',
+          short_name: 'LM Dywany',
+          description: 'System ekspozycji dywanów dla Leroy Merlin Sklep 038 Mikołów',
           theme_color: '#22c55e',
           background_color: '#22c55e',
           display: 'standalone',
@@ -98,6 +98,24 @@ export default defineConfig(() => {
       hmr: process.env.DISABLE_HMR !== 'true',
       // Disable file watching when DISABLE_HMR is true to save CPU during agent edits.
       watch: process.env.DISABLE_HMR === 'true' ? null : {},
+    },
+    build: {
+      chunkSizeWarningLimit: 800,
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules/xlsx')) {
+              return 'vendor-xlsx';
+            }
+            if (id.includes('node_modules/@zxing')) {
+              return 'vendor-zxing';
+            }
+            if (id.includes('node_modules/firebase')) {
+              return 'vendor-firebase';
+            }
+          },
+        },
+      },
     },
   };
 });
